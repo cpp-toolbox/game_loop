@@ -6,20 +6,21 @@
 /* game loop
  *
  * brief:
- * 		a game loop that updates the game state at fixed time intervals while also rendering as fast as possible.
+ * 		a game loop that updates the game state at fixed time intervals while also rendering as fast as
+ * possible.
  *
  * description:
  *      in general we have an update function, it works based on the idea that a certain amount of real-life time has
- *      occurred, one way of doing this would be to simply compute the amount of time that has passed since the last iteration
- *      and use that as our delta time, but we have some constraints saying that our update function only works correctly
- *      when the delta time value is within some range.
+ *      occurred, one way of doing this would be to simply compute the amount of time that has passed since the last
+ * iteration and use that as our delta time, but we have some constraints saying that our update function only works
+ * correctly when the delta time value is within some range.
  *
- *      If your update function uses physics, then usually a good range is something like 20-60Hz, therefore after choosing
- *      a fixed timestep that would keep your update function behaving as desired then we only will call the update function
- *      if that much real-world time has passed.
+ *      If your update function uses physics, then usually a good range is something like 20-60Hz, therefore after
+ * choosing a fixed timestep that would keep your update function behaving as desired then we only will call the update
+ * function if that much real-world time has passed.
  *
- *      We do this by having a variable which stores how much time has elapsed since the last update, and only calling update
- *      if enough time has passed.
+ *      We do this by having a variable which stores how much time has elapsed since the last update, and only calling
+ * update if enough time has passed.
  *
  * notes:
  * 		all time units are seconds
@@ -28,13 +29,9 @@
  *  	cuppajoeman (2023)
  */
 
-
-void GameLoop::start(
-        double update_rate_hz,
-        const std::function<void(double)>& fixed_timestep_update_func,
-        const std::function<void()>& non_rate_limited_update_func,
-        const std::function<int()>& termination_condition_func
-        ) {
+void GameLoop::start(double update_rate_hz, const std::function<void(double)> &fixed_timestep_update_func,
+                     const std::function<void()> &non_rate_limited_update_func,
+                     const std::function<int()> &termination_condition_func) {
 
     double time_elapsed_since_start_of_program = 0;
 
@@ -56,7 +53,8 @@ void GameLoop::start(
             // The last few lines of this iteration are next loops last iteration.
             first_iteration = false;
             time_at_start_of_iteration_last_iteration = time_at_start_of_iteration; // (C)
-            time_elapsed_since_last_state_update = time_at_start_of_iteration; // (F): Pretend an update has occurred at time 0 for bootstrapping purposes
+            time_elapsed_since_last_state_update =
+                time_at_start_of_iteration; // (F): Pretend an update has occurred at time 0 for bootstrapping purposes
             continue;
         }
 
@@ -84,7 +82,7 @@ void GameLoop::start(
                 game_loop_stats.fixed_timestep_stopwatch.press();
 
                 time_remaining_to_fit_updates -= time_between_state_update;
-                enough_time_to_fit_update = time_remaining_to_fit_updates >= time_between_state_update ;
+                enough_time_to_fit_update = time_remaining_to_fit_updates >= time_between_state_update;
             }
             time_elapsed_since_last_state_update = time_remaining_to_fit_updates;
         }
@@ -94,7 +92,6 @@ void GameLoop::start(
 
         // With respect to the start of the next iteration, the code down here is previous iteration.
         time_at_start_of_iteration_last_iteration = time_at_start_of_iteration;
-
     }
 }
 
@@ -109,7 +106,7 @@ void Stopwatch::press() {
         curr_idx = (curr_idx + 1) % num_times_to_average_over; // circular clobbering array.
         previous_time = current_time;
     }
-   average_frequency = 1.0 / this->compute_average_period();
+    average_frequency = 1.0 / this->compute_average_period();
 }
 
 double Stopwatch::compute_average_period() {
@@ -117,6 +114,5 @@ double Stopwatch::compute_average_period() {
     for (int i = 0; i < num_times_to_average_over; i++) {
         delta_sum += times[i];
     }
-    return delta_sum / (double) num_times_to_average_over;
+    return delta_sum / (double)num_times_to_average_over;
 }
-
