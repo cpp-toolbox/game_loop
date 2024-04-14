@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <chrono>
 #include "GLFW/glfw3.h"
 #include "game_loop.hpp"
