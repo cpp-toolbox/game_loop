@@ -2,7 +2,7 @@
 #define FRAG_Z_GAME_LOOP_HPP
 
 #include <functional>
-#include "../stopwatch/stopwatch.hpp"
+#include "sbpt_generated_includes.hpp"
 
 class GameLoopStats {
   public:
